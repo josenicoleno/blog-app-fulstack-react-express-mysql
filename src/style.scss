@@ -70,10 +70,15 @@ $lightGreen: #b9e7e7;
         display: flex;
         align-items: center;
         gap: 10px;
-
         h6 {
           font-size: 16px;
           font-weight: 300;
+        }
+        a{
+          text-decoration: none;
+          &:hover{
+            text-decoration: underline;
+          }
         }
         span {
           cursor: pointer;
@@ -93,6 +98,7 @@ $lightGreen: #b9e7e7;
             color: teal;
             background-color: white;
             border: 1px solid teal;
+            text-decoration: underline;
           }
         }
       }
