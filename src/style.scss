@@ -200,7 +200,7 @@ $lightGreen: #b9e7e7;
   .single {
     display: flex;
     gap: 50px;
-    
+
     .content {
       flex: 5;
       display: flex;
@@ -230,7 +230,7 @@ $lightGreen: #b9e7e7;
           font-weight: bold;
           margin: 0;
         }
-        p{
+        p {
           margin: 0;
         }
       }
@@ -251,7 +251,7 @@ $lightGreen: #b9e7e7;
         margin: 0;
       }
 
-      p{
+      p {
         margin-top: 10px;
         text-align: justify;
         line-height: 30px;
@@ -264,23 +264,23 @@ $lightGreen: #b9e7e7;
       flex-direction: column;
       gap: 25px;
 
-      h1{
+      h1 {
         font-size: 20px;
-        color:#555;
+        color: #555;
       }
 
-      .post{
+      .post {
         display: flex;
         flex-direction: column;
         gap: 10px;
 
-        img{
+        img {
           width: 100%;
           height: 200px;
           object-fit: cover;
         }
 
-        h2{
+        h2 {
           color: #555;
           margin: 0px;
         }
@@ -302,23 +302,93 @@ $lightGreen: #b9e7e7;
         }
       }
     }
-  }//Single
+  } //Single
 
   //Write
-  .add{
+  .add {
     margin-top: 20px;
     display: flex;
     gap: 20px;
-    
-    .content{
-      flex:5
-    }
 
-    .menu{
-      flex:2;
+    .content {
+      flex: 5;
       display: flex;
       flex-direction: column;
-      gap:20px
+      gap: 20px;
+
+      input {
+        padding: 10px;
+        border: 1px solid lightgray;
+      }
+
+      .editorContainer {
+        height: 250px;
+        overflow: scroll;
+        border: 1px solid lightgray;
+
+        .editor {
+          height: 100%;
+          border: none;
+        }
+      }
+    }
+
+    .menu {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .item {
+        border: 1px solid lightgray;
+        padding: 10px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #555;
+
+        h1 {
+          font-size: 20px;
+          margin: 0px;
+        }
+
+        .file{
+          text-decoration: underline;
+          
+          &:hover{
+            cursor: pointer;
+          }
+        }
+        
+        .buttons{
+          display: flex;
+          justify-content: space-between;
+
+          :first-child{
+            cursor: pointer;
+            color: teal;
+            background-color: white;
+            border: 1px solid teal;
+            padding: 3px 5px;
+          }
+
+          :last-child{
+            cursor: pointer;
+            color: white;
+            background-color: teal;
+            border: 1px solid teal;
+            padding: 3px 5px;
+          }
+        }
+        .cat{
+          display: flex;
+          align-items: center;
+          gap: 2px;
+          color: teal;
+        }
+      }
     }
   }
 }
