@@ -49,19 +49,24 @@ const Blog = () => {
     fetchData();
   }, [categoryId])
 
+  const getText = (html) =>{
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent
+  }
+
   return (
     <div className='blog'>
       <div className="posts">
         {posts.map(post => (
           <div className="post" key={post.Id}>
             <div className="img">
-              <img src={post.PostImg} alt='' />
+              <img src={`./upload/${post.PostImg}`} alt='' />
             </div>
             <div className="content">
               <Link className="link" to={`/post/${post.Id}`}>
                 <h1>{post.PostTitle}</h1>
               </Link>
-              <p>{post.PostDescription}</p>
+              <p>{getText(post.PostDescription)}</p>
               <button>Read more</button>
             </div>
           </div>

@@ -18,6 +18,11 @@ const Single = () => {
 
   const { currentUser } = useContext(AuthContext)
 
+  const getText = (html) =>{
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,9 +38,8 @@ const Single = () => {
 
   const handleDelete = async () =>{
     try{
-      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNjg4NDkzMjgwfQ.tJSmRIHJE83x7obbQi7DejVEZVLffA-sjfJRqVIYPrE'
+      const token = document.cookie.split('; ').filter(row => row.startsWith('access_token=')).map(c=>c.split('=')[1])[0]
       const q = `http://localhost:8800/api/posts/${postId +'/' + token}`
-      console.log(q)
       await axios.delete(q);
       navigate('/');
     }catch(err){
@@ -46,7 +50,7 @@ const Single = () => {
   return (
     <div className="single">
       <div className="content">
-        <img src={post?.PostImg} alt="" />
+        <img src={`../upload/${post?.PostImg}`} alt="" />
         <div className="user">
           {post.UserImg && <img src={post.UserImg} alt="" />}
           <div className="info">
@@ -55,7 +59,7 @@ const Single = () => {
           </div>
           {currentUser?.UserName === post.UserName && (
             <div className="edit">
-              <Link to={`/write?edit=2`}>
+              <Link to={`/write?edit=2`} state={post}>
                 <img src={Edit} alt="" />
               </Link>
               <img onClick={handleDelete} src={Delete} alt="" />
@@ -63,9 +67,9 @@ const Single = () => {
           )}
         </div>
         <h1>{post.PostTitle}</h1>
-        {post.PostDescription}
+        {getText(post.PostDescription)}
       </div>
-      <Menu />
+      <Menu cat={post.cat}/>
     </div>
   )
 }
