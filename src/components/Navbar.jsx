@@ -1,13 +1,26 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Logo from "../img/logo-olaf.png"
 import { AuthContext } from '../context/authContext'
+import swal from 'sweetalert'
 
 const Navbar = () => {
   const { currentUser, logout } = useContext(AuthContext)
   const Logout = () => {
-    logout()
+    swal({
+      title: 'Log out',
+      text: "Are you sure that log out?",
+      buttons: ["No", "Yes"]
+    }).then(res => {
+      console.log(res)
+      if (res) {
+        logout()
+        navigate('/')
+      }
+    })
   }
+  const navigate = useNavigate()
+
   return (
     <div className='navbar'>
       <div className="container">
@@ -31,13 +44,16 @@ const Navbar = () => {
           </Link>
           <span>{currentUser?.UserName}</span>
           {currentUser ? (
-            <span onClick={Logout}>Logout</span>
+            <>
+              <span onClick={Logout}>Logout</span>
+              <span className='write'>
+                <Link className='link' to="/write">Write</Link>
+              </span>
+            </>
           ) : (
             <Link className='link' to="/login">Login</Link>
           )}
-          <span className='write'>
-            <Link className='link' to="/write">Write</Link>
-          </span>
+
         </div>
       </div>
     </div>

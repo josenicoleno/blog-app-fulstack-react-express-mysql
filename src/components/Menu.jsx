@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 
 /* const posts = [
@@ -31,7 +32,7 @@ import React, { useEffect, useState } from 'react'
 
 const Menu = ({ cat }) => {
     const [posts, setPosts] = useState([])
-
+    const navigate = useNavigate()
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -43,6 +44,7 @@ const Menu = ({ cat }) => {
         }
         fetchData();
     })
+
     return (
         <div className='menu'>
             <h1>Other post you may like</h1>
@@ -51,7 +53,7 @@ const Menu = ({ cat }) => {
                 <div className="post" key={post.Id}>
                     <img src={`../upload/${post.PostImg}`} alt="" />
                     <h2>{post.PostTitle}</h2>
-                    <button>Read More</button>
+                    <button onClick={() => navigate(`/post/${post.Id}`)}>Read More</button>
                 </div>
             ))}
         </div>

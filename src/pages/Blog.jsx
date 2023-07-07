@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
 
@@ -53,7 +53,8 @@ const Blog = () => {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent
   }
-
+  const navigate = useNavigate()
+  
   return (
     <div className='blog'>
       <div className="posts">
@@ -67,7 +68,7 @@ const Blog = () => {
                 <h1>{post.PostTitle}</h1>
               </Link>
               <p>{getText(post.PostDescription)}</p>
-              <button>Read more</button>
+              <button onClick={() => navigate(`/post/${post.Id}`)}>Read more</button>
             </div>
           </div>
         ))}

@@ -6,6 +6,7 @@ import Menu from '../components/Menu'
 import axios from 'axios'
 import { AuthContext } from '../context/authContext'
 import moment from 'moment'
+import swal from 'sweetalert'
 
 const Single = () => {
   const [post, setPost] = useState({});
@@ -18,7 +19,7 @@ const Single = () => {
 
   const { currentUser } = useContext(AuthContext)
 
-  const getText = (html) =>{
+  const getText = (html) => {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent
   }
@@ -36,15 +37,23 @@ const Single = () => {
     fetchData();
   }, [postId])
 
-  const handleDelete = async () =>{
-    try{
-      const token = document.cookie.split('; ').filter(row => row.startsWith('access_token=')).map(c=>c.split('=')[1])[0]
-      const q = `http://localhost:8800/api/posts/${postId +'/' + token}`
-      await axios.delete(q);
-      navigate('/');
-    }catch(err){
-      console.log(err)
-    }
+  const handleDelete = () => {
+    swal({
+      title: 'Delete',
+      text: "Are you sure you want to delete the post?",
+      buttons: ["No", "Yes"]
+    }).then(async res => {
+      if (res) {
+        try {
+          const token = document.cookie.split('; ').filter(row => row.startsWith('access_token=')).map(c => c.split('=')[1])[0]
+          const q = `http://localhost:8800/api/posts/${postId + '/' + token}`
+          await axios.delete(q);
+          navigate('/');
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    })
   }
 
   return (
@@ -69,7 +78,7 @@ const Single = () => {
         <h1>{post.PostTitle}</h1>
         {getText(post.PostDescription)}
       </div>
-      <Menu cat={post.cat}/>
+      <Menu cat={post.cat} />
     </div>
   )
 }
