@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 import { useLocation, useNavigate } from "react-router-dom"
 import moment from "moment";
+import { AuthContext } from '../context/authContext';
 
 const Write = () => {
   const state = useLocation().state
@@ -13,8 +14,17 @@ const Write = () => {
   const [cat, setCat] = useState(state?.CategoryName || '');
 
   const navigate = useNavigate()
-  
-  const token = document.cookie.split('; ').filter(row => row.startsWith('access_token=')).map(c=>c.split('=')[1])[0]
+
+  const { currentUser } = useContext(AuthContext)
+
+  useEffect(() => {
+    if (currentUser === null) {
+      navigate('/')
+    }
+  })
+
+
+  const token = document.cookie.split('; ').filter(row => row.startsWith('access_token=')).map(c => c.split('=')[1])[0]
 
   const upload = async () => {
     try {
@@ -35,19 +45,19 @@ const Write = () => {
       state ?
         await axios.put(`http://localhost:8800/api/posts/${state.PostId + '/' + token}`, {
           title,
-          desc:value,
+          desc: value,
           cat,
           img: file ? imgUrl : ""
         })
-        :await axios.post(`http://localhost:8800/api/posts/${token}`, {
+        : await axios.post(`http://localhost:8800/api/posts/${token}`, {
           title,
-          desc:value,
+          desc: value,
           cat,
           img: file ? imgUrl : "",
           date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
         })
-        navigate('/')
-    } catch (err){
+      navigate('/')
+    } catch (err) {
       console.log(err)
     }
   }
@@ -76,6 +86,7 @@ const Write = () => {
             <button onClick={handleClick}>Publish</button>
           </div>
         </div>
+        
         <div className="item">
           <h1>Category</h1>
           <div className="cat">
@@ -84,17 +95,17 @@ const Write = () => {
           </div>
 
           <div className="cat">
-            <input type="radio" checked={cat === "Science"} name="cat" value={cat}  id="Science" onChange={e => setCat(e.target.id)} />
+            <input type="radio" checked={cat === "Science"} name="cat" value={cat} id="Science" onChange={e => setCat(e.target.id)} />
             <label htmlFor="science">Science</label>
           </div>
 
           <div className="cat">
-            <input type="radio" checked={cat === "Technology"} name="cat"  value={cat}  id="Technology" onChange={e => setCat(e.target.id)} />
+            <input type="radio" checked={cat === "Technology"} name="cat" value={cat} id="Technology" onChange={e => setCat(e.target.id)} />
             <label htmlFor="technology">Technology</label>
           </div>
 
           <div className="cat">
-            <input type="radio" checked={cat === "Design"} name="cat" value={cat}  id="Design" onChange={e => setCat(e.target.id)} />
+            <input type="radio" checked={cat === "Design"} name="cat" value={cat} id="Design" onChange={e => setCat(e.target.id)} />
             <label htmlFor="design">Design</label>
           </div>
         </div>

@@ -1,24 +1,37 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import Logo from "../img/logo-olaf.png"
+import Logo from "../img/logo.png"
 import { AuthContext } from '../context/authContext'
 import swal from 'sweetalert'
+import axios from 'axios'
 
 const Navbar = () => {
   const { currentUser, logout } = useContext(AuthContext)
+  const [menu, setMenu] = useState([]);
+
   const Logout = () => {
     swal({
       title: 'Log out',
       text: "Are you sure that log out?",
       buttons: ["No", "Yes"]
     }).then(res => {
-      console.log(res)
       if (res) {
         logout()
         navigate('/')
       }
     })
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8800/api/menu`)
+        setMenu(res.data)
+      } catch (err) {
+      }
+    }
+    fetchData();
+  }, [])
   const navigate = useNavigate()
 
   return (
@@ -30,18 +43,14 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="links">
-          <Link className='link' to="/?CategoryId=1">
-            <h6>About me</h6>
-          </Link>
-          <Link className='link' to="/?CategoryId=2">
-            <h6>My works</h6>
-          </Link>
-          <Link className='link' to="/?cat=food">
-            <h6>Blog</h6>
-          </Link>
-          <Link className='link' to="/?cat=design">
-            <h6>Contact</h6>
-          </Link>
+          {
+            menu.map(menu => (
+              <Link className='link' to={menu.Link} key={menu.Id}>
+                <h6>{menu.Title}</h6>
+              </Link>
+            )
+            )
+          }
           <span>{currentUser?.UserName}</span>
           {currentUser ? (
             <>
@@ -53,7 +62,6 @@ const Navbar = () => {
           ) : (
             <Link className='link' to="/login">Login</Link>
           )}
-
         </div>
       </div>
     </div>
